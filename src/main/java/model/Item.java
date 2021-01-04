@@ -11,7 +11,7 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String description;
-    private Timestamp created = new Timestamp(Calendar.getInstance().getTimeInMillis());;
+    private Timestamp created = new Timestamp(Calendar.getInstance().getTimeInMillis());
     private Boolean done = false;
 
     public Integer getId() {
@@ -46,12 +46,26 @@ public class Item {
         this.done = done;
     }
 
+    public Item(int id, String description, Timestamp created, Boolean done) {
+        createItem(id, description, created, done);
+    }
+
     public Item(String description, Boolean done) {
-        this.description = description;
-        this.done = done;
+        createItem(0, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), done);
     }
 
     public Item(String description) {
+        createItem(0, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), false);
+    }
+
+    public Item(int id, String description, boolean done) {
+        createItem(id, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), done);
+    }
+
+    private void createItem(int id, String description, Timestamp created, Boolean done) {
+        this.id = id;
         this.description = description;
+        this.created = created;
+        this.done = done;
     }
 }
