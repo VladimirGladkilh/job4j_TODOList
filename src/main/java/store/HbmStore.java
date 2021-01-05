@@ -3,12 +3,15 @@ package store;
 import model.Item;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class HbmStore implements Store {
     private final StandardServiceRegistry registry;
@@ -31,24 +34,20 @@ public class HbmStore implements Store {
 
     @Override
     public Item add(Item item) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        session.save(item);
-        session.getTransaction().commit();
-        session.close();
-        return item;
+        return this.tx(session -> {
+            session.save(item);
+            return item;
+        });
     }
 
     @Override
     public boolean replace(Integer id, Item item) {
         Item replaced = findById(id);
         if (replaced != null) {
-            Session session = sf.openSession();
-            session.beginTransaction();
-            session.update(item);
-            session.getTransaction().commit();
-            session.close();
-            return true;
+            return this.tx(session -> {
+                session.update(item);
+                return true;
+            });
         } else {
             return false;
         }
@@ -58,14 +57,10 @@ public class HbmStore implements Store {
     public boolean delete(Integer id) {
         Item replaced = findById(id);
         if (replaced != null) {
-            Session session = sf.openSession();
-            session.beginTransaction();
-            Item item = new Item(null);
-            item.setId(id);
-            session.delete(item);
-            session.getTransaction().commit();
-            session.close();
-            return true;
+            return this.tx(session -> {
+                session.delete(replaced);
+                return true;
+            });
         } else {
             return false;
         }
@@ -73,32 +68,29 @@ public class HbmStore implements Store {
 
     @Override
     public List<Item> findAll() {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        List result = session.createQuery("from model.Item ").list();
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        return this.tx(session -> {
+            final Query query = session.createQuery("from model.Item");
+            return query.list();
+        });
     }
 
     @Override
     public List<Item> findActive() {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        List result = session.createQuery("from Item where done = :done").setParameter("done", false).list();
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        return this.tx(session -> {
+            final Query query = session.createQuery("from model.Item where done = :done");
+            query.setParameter("done", false);
+            return query.list();
+        });
     }
 
 
     @Override
     public Item findById(Integer id) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        Optional<Item> result = session.createQuery("from Item where id = :id").setParameter("id", id).stream().findAny();
-        session.getTransaction().commit();
-        session.close();
+        Optional<Item> result = this.tx(session -> {
+            final Query query = session.createQuery("from model.Item where id = :id");
+            query.setParameter("id", id);
+            return query.stream().findAny();
+        });
         return result.isPresent() ? result.get() : null;
     }
 
@@ -115,4 +107,20 @@ public class HbmStore implements Store {
     public void close() throws Exception {
         StandardServiceRegistryBuilder.destroy(registry);
     }
+
+    private <T> T tx(final Function<Session, T> command) {
+        final Session session = sf.openSession();
+        final Transaction tx = session.beginTransaction();
+        try {
+            T rsl = command.apply(session);
+            tx.commit();
+            return rsl;
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
 }
