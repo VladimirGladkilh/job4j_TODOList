@@ -75,7 +75,7 @@ public class HbmStore implements Store {
     public List<Item> findAll() {
         Session session = sf.openSession();
         session.beginTransaction();
-        List result = session.createQuery("from Item ").list();
+        List result = session.createQuery("from model.Item ").list();
         session.getTransaction().commit();
         session.close();
         return result;

@@ -33,7 +33,7 @@
 </head>
 <body onload='refreshData("")'>
 
-<!--script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script-->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
     function refreshData(reqData) {
         $.ajax({
@@ -44,7 +44,7 @@
             origin: "http://localhost:8081"
         })
             .done(function (data) {
-                document.getElementById("cardbody").innerHTML= data;
+                document.getElementById("cardbody").innerHTML = data;
                 document.getElementById("desc").innerText = "";
                 document.getElementById("done").setAttribute("checked", false);
             })
@@ -52,41 +52,37 @@
                 alert("err" + err.message);
             })
     };
+
     function addItem() {
-        var reqData = "id=0&description=" + document.getElementById("desc").innerText + "&done=";
-        if ( document.getElementById("done").checked) {
+        var reqData = "id=0&description=" + document.getElementById("desc").value + "&done=";
+        if (document.getElementById("done").checked) {
             reqData = reqData + "true";
         } else {
             reqData = reqData + "false";
         }
         refreshData(reqData);
     }
+
     function deleteid(id) {
         var reqData = "deleteid=" + id;
         refreshData(reqData);
     }
+
     function doneid(id) {
-        var reqData = "doneid=" + id + "&done=";
-        if ( document.getElementById("id").checked) {
-            reqData = reqData + "true";
-        } else {
-            reqData = reqData + "false";
-        }
+        var reqData = "doneid=" + id;
         refreshData(reqData);
     }
+
     function filter() {
-        var allInputs = $("input[type=checkbox]").filter(':checked:enabled');
-        var visible = document.getElementById("filterCheck").checked;
-        var selected = '';
-        for (var i = 0, max = allInputs.length; i < max; i++){
-            selected = allInputs[i].id;
-            tr = table.getElementById(selected);
-            if (tr) {
-                if (visible) {
-                    tr.style.display = "";
-                } else {
-                    tr.style.display = "none";
-                }
+        let allInputs, visible,  tr;
+        allInputs = $("#itemTable input").filter(":checked").parent().parent();
+        visible = !document.getElementById("filterCheck").checked;
+        for (var i = 0, max = allInputs.length; i < max; i++) {
+            tr = allInputs[i];
+            if (visible) {
+                tr.style.display = "";
+            } else {
+                tr.style.display = "none";
             }
         }
     }
@@ -105,16 +101,18 @@
 </div>
 
 <button class="accordion">Список задач</button>
-<div class="panel" >
-    <p><label><input type="checkbox" id="filterCheck" onchange="filter()"/>Только невыполненые</label><p>
-    <p id="cardbody"><p>
+<div class="panel">
+    <p><label><input type="checkbox" id="filterCheck" onchange="filter()"/>Только невыполненые</label>
+    <p>
+    <p id="cardbody">
+    <p>
 </div>
 <script>
     var acc = document.getElementsByClassName("accordion");
     var i;
 
     for (i = 0; i < acc.length; i++) {
-        acc[i].addEventListener("click", function() {
+        acc[i].addEventListener("click", function () {
             this.classList.toggle("active");
             var panel = this.nextElementSibling;
             if (panel.style.display === "block") {

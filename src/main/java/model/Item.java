@@ -62,6 +62,8 @@ public class Item {
         createItem(id, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), done);
     }
 
+    public Item() {}
+
     private void createItem(int id, String description, Timestamp created, Boolean done) {
         this.id = id;
         this.description = description;

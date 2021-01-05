@@ -19,9 +19,9 @@ public class IndexServlet extends HttpServlet {
         if (req.getParameter("deleteid") != null ){
             HbmStore.instOf().delete(Integer.parseInt(req.getParameter("deleteid")));
         } else if (req.getParameter("doneid") != null) {
-            Item checkItem = HbmStore.instOf().findById(Integer.parseInt(req.getParameter("id")));
+            Item checkItem = HbmStore.instOf().findById(Integer.parseInt(req.getParameter("doneid")));
             if (checkItem != null) {
-                checkItem.setDone(req.getParameter("done").equalsIgnoreCase("true"));
+                checkItem.setDone(!checkItem.getDone());
                 HbmStore.instOf().save(checkItem);
             }
         } else if (req.getParameter("id") != null){
@@ -59,12 +59,12 @@ public class IndexServlet extends HttpServlet {
     }
 
     private String generateDelBtn(Item item) {
-        return String.format("<i class=\"fa fa-remove mr-3\" onclick=\"deleteid(%s)\"></i>", item.getId());
+        return String.format("<a href=\"#\" onclick=\"deleteid(%s)\"; return false>X</a>", item.getId());
     }
 
     private String generateCheckBox(Item item) {
         String checkBox = String.format("<input type=\"checkbox\" id=\"%s\" %s onchange=\"doneid(%s)\" />",
-                item.getId(), item.getDone() ? "checked disabled" : "", item.getId());
+                item.getId(), item.getDone() ? "checked" : "", item.getId());
         return  checkBox;
     }
 
