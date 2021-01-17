@@ -13,6 +13,17 @@ public class Item {
     private String description;
     private Timestamp created = new Timestamp(Calendar.getInstance().getTimeInMillis());
     private Boolean done = false;
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Integer getId() {
         return id;
@@ -46,28 +57,29 @@ public class Item {
         this.done = done;
     }
 
-    public Item(int id, String description, Timestamp created, Boolean done) {
-        createItem(id, description, created, done);
+    public Item(int id, String description, Timestamp created, Boolean done, User user) {
+        createItem(id, description, created, done, user);
     }
 
-    public Item(String description, Boolean done) {
-        createItem(0, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), done);
+    public Item(String description, Boolean done, User user) {
+        createItem(0, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), done, user);
     }
 
-    public Item(String description) {
-        createItem(0, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), false);
+    public Item(String description, User user) {
+        createItem(0, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), false, user);
     }
 
-    public Item(int id, String description, boolean done) {
-        createItem(id, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), done);
+    public Item(int id, String description, boolean done, User user) {
+        createItem(id, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), done, user);
     }
 
     public Item() {}
 
-    private void createItem(int id, String description, Timestamp created, Boolean done) {
+    private void createItem(int id, String description, Timestamp created, Boolean done, User user) {
         this.id = id;
         this.description = description;
         this.created = created;
         this.done = done;
+        this.user = user;
     }
 }

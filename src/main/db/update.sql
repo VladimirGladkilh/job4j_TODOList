@@ -1,0 +1,1 @@
+alter table item add column userid int not null references users(id);
