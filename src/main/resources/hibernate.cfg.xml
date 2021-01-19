@@ -22,6 +22,8 @@
         <mapping class="toone.Juser" />
         <mapping class="many.Marka" />
         <mapping class="many.Model" />
+        <mapping class="manytomany.Person" />
+        <mapping class="manytomany.Address" />
 
     </session-factory>
 </hibernate-configuration>
