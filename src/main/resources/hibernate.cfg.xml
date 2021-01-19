@@ -20,6 +20,8 @@
         <mapping class="model.User" />
         <mapping class="toone.Role" />
         <mapping class="toone.Juser" />
+        <mapping class="many.Marka" />
+        <mapping class="many.Model" />
 
     </session-factory>
 </hibernate-configuration>
