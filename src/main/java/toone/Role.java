@@ -1,6 +1,8 @@
 package toone;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -11,6 +13,8 @@ public class Role {
     private int id;
 
     private String name;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Juser> users = new ArrayList<>();
 
     public static Role of(String name) {
         Role role = new Role();
@@ -32,6 +36,18 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Juser> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<Juser> users) {
+        this.users = users;
+    }
+
+    public void addUser(Juser u) {
+        this.users.add(u);
     }
 
     @Override
