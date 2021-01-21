@@ -16,30 +16,34 @@ public class HbmRunModel {
             Session session = sf.openSession();
             session.beginTransaction();
 
-            Model one = Model.of("2101");
-            session.save(one);
-
-            Model two = Model.of("2110");
-            session.save(two);
-
-            Model three = Model.of("Kalina");
-            session.save(three);
-
-            Model four = Model.of("Priora");
-            session.save(four);
-
-            Model five = Model.of("Vesta");
-            session.save(five);
-
             Marka marka = Marka.of("LADA");
-            marka.addModels(one);
-            marka.addModels(two);
-            marka.addModels(three);
-            marka.addModels(four);
-            marka.addModels(five);
+            session.persist(marka);
+            Marka marka2 = Marka.of("BMW");
+            session.persist(marka2);
+
+            Model one = Model.of("2101", marka);
+            session.persist(one);
+
+            Model two = Model.of("2110", marka);
+            session.persist(two);
+
+            Model three = Model.of("Kalina", marka);
+            session.persist(three);
+
+            Model four = Model.of("Priora", marka);
+            session.persist(four);
+
+            Model five = Model.of("Vesta", marka);
+            session.persist(five);
 
 
-            session.save(marka);
+
+            Model b1 = Model.of("X5", marka2);
+            session.persist(b1);
+
+            Model b2 = Model.of("535i", marka2);
+            session.persist(b2);
+
 
             session.getTransaction().commit();
             session.close();

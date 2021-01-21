@@ -16,6 +16,9 @@ public class Marka {
 
     private String name;
 
+    @OneToMany(mappedBy = "marka")
+    private List<Model> models = new ArrayList<>();
+
     public List<Model> getModels() {
         return models;
     }
@@ -27,8 +30,7 @@ public class Marka {
     public void addModels(Model model) {
         this.models.add(model);
     }
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Model> models = new ArrayList<>();
+
 
     public static Marka of(String name) {
         Marka marka = new Marka();
@@ -64,4 +66,5 @@ public class Marka {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
