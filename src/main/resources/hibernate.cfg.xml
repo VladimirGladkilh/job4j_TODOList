@@ -26,6 +26,8 @@
         <mapping class="manytomany.Address" />
         <mapping class="manytomany.Book"/>
         <mapping class="manytomany.Author"/>
+        <mapping class="lazy.Category"/>
+        <mapping class="lazy.Task"/>
 
     </session-factory>
 </hibernate-configuration>
