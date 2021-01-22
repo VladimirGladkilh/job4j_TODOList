@@ -1,5 +1,7 @@
-package lazy;
+package model;
 
+import many.Marka;
+import many.Model;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -11,7 +13,7 @@ import java.util.List;
 
 public class HbmRunSelect {
     public static void main(String[] args) {
-        List<CategoryLazy> list = new ArrayList<>();
+        List<Item> list = new ArrayList<>();
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure().build();
         try {
@@ -19,7 +21,7 @@ public class HbmRunSelect {
             Session session = sf.openSession();
             session.beginTransaction();
             list = session.createQuery(
-                    "select distinct c from CategoryLazy c join fetch c.tasks"
+                    "select c from Item c fetch all properties "
             ).list();
             session.getTransaction().commit();
             session.close();
@@ -28,8 +30,12 @@ public class HbmRunSelect {
         } finally {
             StandardServiceRegistryBuilder.destroy(registry);
         }
-        for (Task task : list.get(0).getTasks()) {
-            System.out.println(task);
+        System.out.println(list.size());
+        for (Item marka : list) {
+            System.out.println(marka.getDescription());
+            for (Category model : marka.getCategories()) {
+                System.out.println("\t"+model.getName());
+            }
         }
     }
 }

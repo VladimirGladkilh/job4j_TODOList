@@ -17,13 +17,13 @@ public class HbmRunFill {
             Session session = sf.openSession();
             session.beginTransaction();
 
-            Category one = Category.of("First");
+            CategoryLazy one = CategoryLazy.of("First");
             session.save(one);
 
-            Category two = Category.of("Second");
+            CategoryLazy two = CategoryLazy.of("Second");
             session.save(two);
 
-            Category three = Category.of("Another");
+            CategoryLazy three = CategoryLazy.of("Another");
             session.save(three);
 
             Task t1 = Task.of("Task 1", one);

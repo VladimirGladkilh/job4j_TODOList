@@ -6,20 +6,20 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "categories")
-public class Category {
+@Table(name = "categoryLazy")
+public class CategoryLazy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "categoryLazy")
     private List<Task> tasks = new ArrayList<>();
 
-    public static Category of(String name) {
-        Category category = new Category();
-        category.name = name;
-        return category;
+    public static CategoryLazy of(String name) {
+        CategoryLazy categoryLazy = new CategoryLazy();
+        categoryLazy.name = name;
+        return categoryLazy;
     }
 
     public int getId() {
@@ -50,8 +50,8 @@ public class Category {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return id == category.id;
+        CategoryLazy categoryLazy = (CategoryLazy) o;
+        return id == categoryLazy.id;
     }
 
     @Override
