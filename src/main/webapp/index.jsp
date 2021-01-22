@@ -169,6 +169,7 @@
         <table class="table table-bordered" id="itemTable">
             <tr>
                 <th>№</th>
+                <th>Дата</th>
                 <th>Содержание</th>
                 <th>Категория</th>
                 <th>Выполнено</th>
@@ -178,6 +179,7 @@
 
                 <tr id="${element.id}">
                     <td>${counter.count}</td>
+                    <td><c:out value="${element.created}"/></td>
                     <td><c:out value="${element.description}"/></td>
                     <td>
                         <c:forEach var="category" items="${element.categories}">

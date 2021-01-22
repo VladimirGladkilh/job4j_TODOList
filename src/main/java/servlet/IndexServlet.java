@@ -19,8 +19,6 @@ public class IndexServlet extends HttpServlet {
             User user = (User) req.getSession().getAttribute("user");
             req.setAttribute("user", user);
             req.setAttribute("items", HbmStore.instOf().findByUser(user));
-            List<Item> items = HbmStore.instOf().findByUser(user);
-            items.forEach(System.out::println);
             req.setAttribute("allCategory", HbmStore.instOf().findAll(Category.class));
             req.getRequestDispatcher("index.jsp").forward(req, resp);
         } else {

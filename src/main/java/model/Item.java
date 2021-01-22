@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -14,7 +15,8 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String description;
-    private Timestamp created = new Timestamp(Calendar.getInstance().getTimeInMillis());
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created;
     private Boolean done = false;
     @ManyToOne
     @JoinColumn(name = "userid")
@@ -58,7 +60,7 @@ public class Item {
         this.description = description;
     }
 
-    public Timestamp getCreated() {
+    public Date getCreated() {
         return created;
     }
 
@@ -74,31 +76,32 @@ public class Item {
         this.done = done;
     }
 
-    public Item(int id, String description, Timestamp created, Boolean done, User user) {
-        createItem(id, description, created, done, user);
+    public Item(int id, String description, Boolean done, User user) {
+        createItem(id, description, done, user);
     }
 
     public Item(String description, Boolean done, User user) {
-        createItem(0, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), done, user);
+        createItem(0, description, done, user);
     }
 
     public Item(String description, User user) {
-        createItem(0, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), false, user);
+        createItem(0, description, false, user);
     }
 
     public Item(int id, String description, boolean done, User user) {
-        createItem(id, description, new Timestamp(Calendar.getInstance().getTimeInMillis()), done, user);
+        createItem(id, description, done, user);
     }
 
     public Item() {}
 
-    private void createItem(int id, String description, Timestamp created, Boolean done, User user) {
+    private void createItem(int id, String description, Boolean done, User user) {
         this.id = id;
         this.description = description;
         this.created = created;
         this.done = done;
         this.user = user;
         this.categories = new ArrayList<>();
+        this.created = new Date(System.currentTimeMillis());
     }
 
     @Override

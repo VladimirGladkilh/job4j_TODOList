@@ -196,12 +196,10 @@ public class HbmStore implements Store {
 
     @Override
     public void save(Item item, String cIds) {
-        System.out.println("ids = "+ cIds);
         for (String id : cIds.split(";")) {
             if (id != null && !"".equals(id) && !id.equals(";")) {
                 Category category = findCategoryById(Integer.parseInt(id));
                 if (category != null) {
-                    System.out.println(category.getName());
                     item.addCategory(category);
                 }
             }
