@@ -12,13 +12,13 @@ public class Task {
 
     private String description;
     @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @JoinColumn(name = "categoryLazy_id")
+    private CategoryLazy categoryLazy;
 
-    public static Task of(String description, Category category) {
+    public static Task of(String description, CategoryLazy categoryLazy) {
         Task task = new Task();
         task.description = description;
-        task.category = category;
+        task.categoryLazy = categoryLazy;
         return task;
     }
 
@@ -38,12 +38,12 @@ public class Task {
         this.description = description;
     }
 
-    public Category getCategory() {
-        return category;
+    public CategoryLazy getCategory() {
+        return categoryLazy;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(CategoryLazy categoryLazy) {
+        this.categoryLazy = categoryLazy;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class Task {
         return "Task{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
-                ", category=" + category +
+                ", category=" + categoryLazy +
                 '}';
     }
 }

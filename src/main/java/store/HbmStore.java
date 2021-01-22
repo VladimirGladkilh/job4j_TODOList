@@ -1,5 +1,6 @@
 package store;
 
+import model.Category;
 import model.Item;
 import model.User;
 import org.hibernate.Session;
@@ -98,7 +99,7 @@ public class HbmStore implements Store {
     @Override
     public List<Item> findByUser(User user) {
         return this.tx(session -> {
-            final Query query = session.createQuery("from model.Item where user = :user");
+            final Query query = session.createQuery("from model.Item i fetch all properties where i.user = :user");
             query.setParameter("user", user);
             return query.list();
         });
@@ -181,6 +182,31 @@ public class HbmStore implements Store {
         } else {
             update(user.getId(), user);
         }
+    }
+
+    @Override
+    public Category findCategoryById(Integer id) {
+        Optional<Category> result = this.tx(session -> {
+            final Query query = session.createQuery("from model.Category where id = :id");
+            query.setParameter("id", id);
+            return query.stream().findAny();
+        });
+        return result.isPresent() ? result.get() : null;
+    }
+
+    @Override
+    public void save(Item item, String cIds) {
+        System.out.println("ids = "+ cIds);
+        for (String id : cIds.split(";")) {
+            if (id != null && !"".equals(id) && !id.equals(";")) {
+                Category category = findCategoryById(Integer.parseInt(id));
+                if (category != null) {
+                    System.out.println(category.getName());
+                    item.addCategory(category);
+                }
+            }
+        }
+        save(item);
     }
 
     @Override

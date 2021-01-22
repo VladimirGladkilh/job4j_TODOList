@@ -1,8 +1,11 @@
 package model;
 
+
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 @Entity
 @Table(name = "item")
@@ -17,6 +20,20 @@ public class Item {
     @JoinColumn(name = "userid")
     private User user;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Category> categories;
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
+    }
     public User getUser() {
         return user;
     }
@@ -81,5 +98,17 @@ public class Item {
         this.created = created;
         this.done = done;
         this.user = user;
+        this.categories = new ArrayList<>();
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", created=" + created +
+                ", done=" + done +
+                ", user=" + user +
+                '}';
     }
 }

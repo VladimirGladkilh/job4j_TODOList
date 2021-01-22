@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -76,7 +75,7 @@
         })
             .done(function (data) {
                 location.reload();
-                document.getElementsByClassName("panel")[1].style.display="block";
+                document.getElementsByClassName("panel")[1].style.display = "block";
             })
             .fail(function (err) {
                 alert("err" + err.message);
@@ -90,6 +89,7 @@
         } else {
             reqData = reqData + "false";
         }
+        reqData =  reqData + "&cIds=" + getSelectValues(document.getElementById("cIds"));
         refreshData(reqData);
     }
 
@@ -116,6 +116,20 @@
             }
         }
     }
+    function getSelectValues(select) {
+        var result = "";
+        var options = select && select.options;
+        var opt;
+
+        for (var i=0, iLen=options.length; i<iLen; i++) {
+            opt = options[i];
+
+            if (opt.selected) {
+                result += opt.value + ";";
+            }
+        }
+        return result;
+    }
 </script>
 <div class="container">
     <div class="row">
@@ -135,6 +149,14 @@
             <input type="text" id="desc" class="form-control" name="description" value="">
             <label>Выполнена</label>
             <input type="checkbox" id="done" class="form-control" name="done" value="">
+            <label class="col-form-label col-sm-3" for="cIds" style="font-weight: 900">Список категорий</label>
+            <div class="col-sm-5">
+                <select class="form-control" name="cIds" id="cIds" multiple>
+                    <c:forEach items="${allCategory}" var="cat">
+                        <option value="${cat.id}">${cat.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
         </div>
         <button type="button" class="btn btn-primary" onclick="addItem()">Добавить</button>
     </form>
@@ -144,24 +166,31 @@
 <div class="panel" display="block">
     <label><input type="checkbox" id="filterCheck" onchange="filter()"/>Только невыполненые</label>
     <div class="container">
-    <table class="table table-bordered" id="itemTable">
-        <tr>
-            <th>№</th>
-            <th>Содержание</th>
-            <th>Выполнено</th>
-            <th>Удалить</th>
-        </tr>
-        <c:forEach var="element" items="${requestScope.items}" varStatus="counter">
-
-            <tr id="${element.id}">
-                <td>${counter.count}</td>
-                <td><c:out value="${element.description}"/></td>
-                <td><input type="checkbox" id="${element.id}" ${element.done ? "checked" : ""}
-                           onchange="doneid(${element.id})"/></td>
-                <td><a href="#" onclick="deleteid(${element.id})"; return false>X</a></td>
+        <table class="table table-bordered" id="itemTable">
+            <tr>
+                <th>№</th>
+                <th>Содержание</th>
+                <th>Категория</th>
+                <th>Выполнено</th>
+                <th>Удалить</th>
             </tr>
-        </c:forEach>
-    </table>
+            <c:forEach var="element" items="${requestScope.items}" varStatus="counter">
+
+                <tr id="${element.id}">
+                    <td>${counter.count}</td>
+                    <td><c:out value="${element.description}"/></td>
+                    <td>
+                        <c:forEach var="category" items="${element.categories}">
+                            <c:out value="${category.name}"/>
+                        </c:forEach>
+
+                    </td>
+                    <td><input type="checkbox" id="${element.id}" ${element.done ? "checked" : ""}
+                               onchange="doneid(${element.id})"/></td>
+                    <td><a href="#" onclick="deleteid(${element.id})" ; return false>X</a></td>
+                </tr>
+            </c:forEach>
+        </table>
     </div>
 </div>
 
