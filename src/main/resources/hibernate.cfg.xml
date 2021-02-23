@@ -35,6 +35,8 @@
         <mapping class="hql.BookHql" />
         <mapping class="hql.Account"/>
         <mapping class="hql.Candidate"/>
+        <mapping class="hql.PostBase"/>
+        <mapping class="hql.PostHql"/>
 
     </session-factory>
 </hibernate-configuration>

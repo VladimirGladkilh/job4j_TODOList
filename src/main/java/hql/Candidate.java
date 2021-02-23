@@ -16,15 +16,19 @@ public class Candidate {
 
     private int salary;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private PostBase postBase;
+
     public Candidate() {
     }
 
-    public static Candidate of(int id, String name, String experience, int salary) {
+    public static Candidate of(int id, String name, String experience, int salary, PostBase postBase) {
         Candidate candidate = new Candidate();
         candidate.id = id;
         candidate.name = name;
         candidate.experience = experience;
         candidate.salary = salary;
+        candidate.postBase = postBase;
         return  candidate;
     }
 
@@ -60,6 +64,13 @@ public class Candidate {
         this.salary = salary;
     }
 
+    public PostBase getPostBase() {
+        return postBase;
+    }
+
+    public void setPostBase(PostBase postBase) {
+        this.postBase = postBase;
+    }
     @Override
     public int hashCode() {
         return Objects.hash(id);

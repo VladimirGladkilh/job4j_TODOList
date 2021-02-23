@@ -16,48 +16,54 @@ public class HbmRubCandidate {
             Session session = sf.openSession();
             session.beginTransaction();
 
+            /* Init posts
+            PostBase postBase = PostBase.of("HH-ru");
+            PostHql postHql = PostHql.of(1, "Java developer");
+            session.save(postHql);
+            PostHql postHql2 = PostHql.of(2, "QA analyzer");
+            session.save(postHql2);
+            PostHql postHql3 = PostHql.of(3, "Devops");
+            session.save(postHql3);
+
+            postBase.addPostHql(postHql);
+            postBase.addPostHql(postHql2);
+            postBase.addPostHql(postHql3);
+            session.saveOrUpdate(postBase);
+
+            PostBase postBase2 = PostBase.of("SuperJob");
+            PostHql postHql4 = PostHql.of(4, "Java developer");
+            session.save(postHql4);
+            PostHql postHql5 = PostHql.of(5, "QA analyzer");
+            session.save(postHql5);
+            PostHql postHql6 = PostHql.of(6, "Devops");
+            session.save(postHql6);
+
+            postBase2.addPostHql(postHql4);
+            postBase2.addPostHql(postHql5);
+            postBase2.addPostHql(postHql6);
+            session.saveOrUpdate(postBase2);
+            */
             /* Init
-            Candidate one = Candidate.of(1,"Alex", "Junior", 50000);
-            Candidate two = Candidate.of(2, "Nikolay", "Middle", 100000);
-            Candidate three = Candidate.of(3,"Nikita", "Senior", 1300000);
+            Candidate one = Candidate.of(1,"Alex", "Junior", 50000, postBase);
+            Candidate two = Candidate.of(2, "Nikolay", "Middle", 100000, postBase2);
+            Candidate three = Candidate.of(3,"Nikita", "Senior", 1300000, postBase);
 
             session.save(one);
             session.save(two);
             session.save(three);
-            */
-            //*  Select all
-            Query query = session.createQuery("from Candidate ");
-            for (Object st : query.list()) {
-                System.out.println(st);
-            }
-            //*  Select by id
-            Query queryById = session.createQuery("from Candidate c where c.id=:id")
-                    .setParameter("id", 2);
-            System.out.println(queryById.uniqueResult());
-            //*/
-            //* select by name
-            Query queryByName = session.createQuery("from Candidate c where lower(c.name)=:name")
-                    .setParameter("name", "Alex".toLowerCase());
-            System.out.println(queryByName.uniqueResult());
-            // */
 
-            //* Update
-            Query queryUpdate = session.createQuery(
-                    "update Candidate s set s.name = :name, s.experience = :exp, " +
-                            "s.salary = : salary where s.id = :fId"
-            );
-            queryUpdate.setParameter("name", "Alex");
-            queryUpdate.setParameter("exp", "Middle");
-            queryUpdate.setParameter("salary", 75000);
-            queryUpdate.setParameter("fId", 1);
-            queryUpdate.executeUpdate();
-            //*/
+             */
 
-            //* delete
-            session.createQuery("delete from Candidate where id = :fId")
-                    .setParameter("fId", 3)
-                    .executeUpdate();
-            //*/
+            Candidate rsl = session.createQuery(
+                    "select distinct ct from Candidate ct "
+                            + "join fetch ct.postBase pb "
+                            + "join fetch pb.postHqls ph "
+                            + "where ct.id = :sId", Candidate.class
+            ).setParameter("sId", 6).uniqueResult();
+            System.out.println(rsl);
+
+
+
 
             session.getTransaction().commit();
             session.close();
