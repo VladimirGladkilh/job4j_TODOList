@@ -32,6 +32,8 @@
         <mapping class="lazy.Task"/>
 
         <mapping class="hql.Student"/>
+        <mapping class="hql.BookHql" />
+        <mapping class="hql.Account"/>
         <mapping class="hql.Candidate"/>
 
     </session-factory>

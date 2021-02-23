@@ -14,6 +14,16 @@ public class Student {
     private int age;
 
     private String city;
+    @OneToOne(fetch = FetchType.LAZY)
+    private Account account;
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
     public static Student of(String name, int age, String city) {
         Student student = new Student();
