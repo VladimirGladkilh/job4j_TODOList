@@ -31,5 +31,8 @@
         <mapping class="lazy.CategoryLazy"/>
         <mapping class="lazy.Task"/>
 
+        <mapping class="hql.Student"/>
+        <mapping class="hql.Candidate"/>
+
     </session-factory>
 </hibernate-configuration>
