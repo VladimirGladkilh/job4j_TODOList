@@ -100,7 +100,12 @@
             <artifactId>maven-deploy-plugin</artifactId>
             <version>3.0.0-M1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.5.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
